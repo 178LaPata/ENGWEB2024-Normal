@@ -1,0 +1,81 @@
+1. Quantos registos estão na base de dados;
+    db.contratos.countDocuments()
+    Resultado: 36377
+
+2. Quantos registos de contratos têm o tipo de procedimento com valor "Ajuste Direto Regime Geral"?
+    db.contratos.find({"tipoprocedimento": "Ajuste Direto Regime Geral"}).count()
+    Resultado: 17067
+
+3. Qual a lista de entidades comunicantes (ordenada alfabeticamente e sem repetições)?
+    db.contratos.distinct("entidade_comunicante")
+    Resultado: (apenas alguns exemplos do resultado)
+        [
+            'A ARCIAL - Associação para Recuperação de Cidadãos Inadaptados de Oliveira do Hospital',
+            'A Oficina Centro de Artes e Mesteres Tradicionais de Guimarães, CIPRL',
+            'A. D. A. M. - Águas do Alto Minho, S. A.',
+            'ABIMOTA - Associação Nacional das Indústrias de Duas Rodas, Ferragens, Mobiliário e Afins',
+            'ABMG - Águas do Baixo Mondego e Gândara, E. I. M., S. A.',
+            'AC, Águas de Coimbra, E. M.',
+            'ACA - Associação Casa da Arquitectura',
+            'ACAPORAMA - Associação de Casas do Povo da Região Autonoma da Madeira',
+            'ACISO - Associação Empresarial Ourém - Fátima',
+            'ACLEM - Arte, Cultura e Lazer, Empresa Municipal, E. M.',
+            'ACPMR - Associação Cluster Portugal Mineral Resources',
+            'AD ELO Associação de Desenvolvimento Local da Bairrada e Mondego',
+            'ADAE - Associação de Desenvolvimento da Alta Estremadura',
+            'ADC - Águas da Covilhã, E. M.',
+            'ADD - Associação de Desenvolvimento do Dão',
+            'ADEMINHO - Associação para o Desenvolvimento do Ensino Profissional do Alto Minho Interior',
+            'ADENE - Agência para a Energia',
+    ]
+
+4. Qual a distribuição de contratos por tipo de procedimento (quantos contratos tem cada tipo de procedimento)?
+    db.contratos.aggregate([{"$group": {"_id": "$tipoprocedimento", count: { $sum:1}}}])
+    Resultado:
+        [
+            { _id: 'Ao abrigo de acordo-quadro (art.º 258.º)', count: 995 },
+            { _id: 'Concurso público', count: 5300 },
+            { _id: 'Concurso limitado por prévia qualificação', count: 53 },
+            { _id: 'Contratação excluída II', count: 144 },
+            { _id: 'Consulta Prévia Simplificada', count: 96 },
+            { _id: 'Ajuste Direto Regime Geral', count: 17067 },
+            {
+                _id: 'Consulta prévia ao abrigo do artigo 7º da Lei n.º 30/2021, de 21.05',
+                count: 1
+            },
+            { _id: 'Setores especiais – isenção parte II', count: 39 },
+            { _id: 'Concurso público simplificado', count: 3 },
+            { _id: 'Procedimento de negociação', count: 1 },
+            { _id: 'Consulta Prévia', count: 8000 },
+            { _id: 'Ao abrigo de acordo-quadro (art.º 259.º)', count: 4678 }
+        ]
+
+5. Qual o montante global por entidade comunicante (somatório dos contratos associados a uma entidade)?
+    db.contratos.aggregate([{"$group": {"_id": "$entidade_comunicante", count: { $sum:1}}}])
+    Resultado: (apenas alguns exemplos do resultado)
+        [
+            {
+                _id: 'APPACDM DE LISBOA - Associação Portuguesa de Pais e Amigos do Cidadão Deficiente Mental',
+                count: 1
+            },
+            {
+                _id: 'Escola Secundária João Gonçalves Zarco, Matosinhos',
+                count: 18
+            },
+            { _id: 'Metro do Porto, S. A.', count: 1 },
+            {
+                _id: 'APPACDM do Porto -Associação Portuguesa de Pais e Amigos do Cidadão Deficiente Mental',
+                count: 3
+            },
+            {
+                _id: 'Assembleia Legislativa da Região Autónoma dos Açores',
+                count: 6
+            },
+            { _id: 'Agrupamento de Escolas Abel Botelho, Tabuaço', count: 15 },
+            {
+                _id: 'TERAMB, EM - Empresa Municipal de Gestão e Valorização Ambiental da Ilha Terceira',
+                count: 1
+            },
+            { _id: 'Município do Seixal', count: 119 },
+            { _id: 'Beatriz Ribeiro e Filhos L.da', count: 1 }
+        ]

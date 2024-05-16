@@ -1,0 +1,37 @@
+extends layout 
+
+block content
+  .w3-card-4
+    header.w3-container.w3-cyan(style="position: fixed; top: 0; left: 0; margin-left: 0; width: 100%")
+        h1(style="text-align: center")
+          span Página de Entidade
+
+    .w3-container(style="margin-top: 50px") 
+        ul 
+            li NIPC: #{entidade[0].NIPC_entidade_comunicante}
+            li Nome: #{entidade[0].entidade_comunicante}
+            li Total de preços contratuais: #{resSoma}
+
+    .w3-container
+        table.w3-table-all
+          tr
+            th ID do Contrato
+            th Objeto Contrato
+            th Data de Celebração do Contrato
+            th Preço Contratual
+            th NIPC - Entidade Comunicante
+            th Entidade Comunicante
+            each ent in entidade
+                tr
+                    td 
+                        a(href="/" + ent._id)= ent._id
+                    td= ent.objectoContrato
+                    td= ent.dataCelebracaoContrato
+                    td= ent.precoContratual
+                    td
+                        a(href="/entidades/" + ent.NIPC_entidade_comunicante)= ent.NIPC_entidade_comunicante
+                    td= ent.entidade_comunicante
+    footer.w3-container.w3-cyan(style="position: fixed; bottom: 0; left: 0; margin-left: 0; width: 100%; height: 50px; text-align: center; line-height: 50px;")
+        address 
+            | EngWeb2024::a95454::#{data}::
+            a(href="/") Return
